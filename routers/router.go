@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"zhihu-golang-web/pkg/setting"
 	"zhihu-golang-web/routers/v1"
+	//"zhihu-golang-web/middleware"
 )
 
 func InitRouter() *gin.Engine {
@@ -13,12 +14,15 @@ func InitRouter() *gin.Engine {
 
 	r.Use(gin.Recovery())
 	gin.SetMode(setting.RunMode_.RUN_MODE)
+	r.GET("/auth", GetAuth)
 	apiv1 := r.Group("/api/v1")
+	//apiv1.Use(middleware.JWT())
 	{
 		//获取标签列表
 		apiv1.GET("/products", v1.GetProducts)
-		//新建标签
+		apiv1.GET("/product/:id", v1.GetProduct)
 
+		//新建标签
 	}
 	return r
 }

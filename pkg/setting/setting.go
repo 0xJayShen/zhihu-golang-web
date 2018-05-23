@@ -22,12 +22,31 @@ type App struct {
 type RunMode struct {
 	RUN_MODE string
 }
+type DataBase struct{
+	TYPE string
+	USER string
+	PASSWORD string
+	HOST string
+	NAME string
+	TABLE_PREFIX string
+
+}
+type Redis struct{
+	RedisAddress string
+	RedisMaxIdle int
+	RedisMaxActive int
+	RedisIdleTimeout int
+}
+
+
 
 var (
 	Cfg      *ini.File
 	RunMode_ *RunMode
 	Server_  *Server
 	App_     *App
+	DataBase_ *DataBase
+	Redis_ *Redis
 )
 
 func init() {
@@ -41,12 +60,14 @@ func init() {
 	LoadBase()
 	LoadServer()
 	LoadApp()
+	LoadDataBase()
+	LoadRedis()
 }
 func LoadBase() {
 	RunMode_ = new(RunMode)
 	err := Cfg.MapTo(RunMode_)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println(err,"1")
 	}
 
 }
@@ -62,6 +83,21 @@ func LoadServer() {
 func LoadApp() {
 	App_ = new(App)
 	err :=  Cfg.Section("App").MapTo(App_)
+	if err != nil {
+
+	}
+}
+func LoadDataBase(){
+	DataBase_ = new(DataBase)
+	err :=  Cfg.Section("DataBase").MapTo(DataBase_)
+	if err != nil {
+
+	}
+}
+
+func LoadRedis(){
+	Redis_ = new(Redis)
+	err :=  Cfg.Section("Redis").MapTo(Redis_)
 	if err != nil {
 
 	}
