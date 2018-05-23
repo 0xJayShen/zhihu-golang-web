@@ -6,7 +6,7 @@ import (
 
 	"github.com/jinzhu/gorm"
 
-	"github.com/zhihu-golang-web/pkg/setting"
+	"github.com/qq976739120/zhihu-golang-web/pkg/setting"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
 	"time"

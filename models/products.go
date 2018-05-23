@@ -10,7 +10,7 @@ import (
 	"strings"
 	"github.com/zhihu-golang-web/pkg/logging"
 	"time"
-	"github.com/zhihu-golang-web/pkg/msg"
+	"github.com/qq976739120/zhihu-golang-web/pkg/msg"
 )
 
 type Product struct {

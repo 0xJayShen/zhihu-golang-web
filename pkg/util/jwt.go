@@ -5,7 +5,7 @@ import (
 
 jwt "github.com/dgrijalva/jwt-go"
 
-"github.com/zhihu-golang-web/pkg/setting"
+"github.com/qq976739120/zhihu-golang-web/pkg/setting"
 )
 
 var jwtSecret = []byte(setting.App_.JWT_SECRET)
