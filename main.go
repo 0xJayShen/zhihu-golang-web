@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/qq976739120/zhihu-golang-web/pkg/setting"
-	"github.com/zhihu-golang-web/routers"
+	"github.com/qq976739120/zhihu-golang-web/routers"
 
 	"reflect"
 	"time"
