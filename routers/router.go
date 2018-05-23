@@ -2,8 +2,8 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
-	"zhihu-golang-web/pkg/setting"
-	"zhihu-golang-web/routers/v1"
+	"github.com/zhihu-golang-web/pkg/setting"
+	"github.com/zhihu-golang-web/routers/v1"
 	//"zhihu-golang-web/middleware"
 )
 

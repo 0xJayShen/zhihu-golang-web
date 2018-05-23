@@ -1,13 +1,13 @@
 package routers
 
 import (
-	"zhihu-golang-web/pkg/logging"
+	"github.com/zhihu-golang-web/pkg/logging"
 	"net/http"
 	"github.com/gin-gonic/gin"
 	"github.com/astaxie/beego/validation"
-	"zhihu-golang-web/pkg/msg"
-	"zhihu-golang-web/models"
-	"zhihu-golang-web/pkg/util"
+	"github.com/zhihu-golang-web/pkg/msg"
+	"github.com/zhihu-golang-web/models"
+	"github.com/zhihu-golang-web/pkg/util"
 
 )
 
