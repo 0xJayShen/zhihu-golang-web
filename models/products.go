@@ -1,16 +1,16 @@
 package models
 
 import (
-	"github.com/zhihu-golang-web/cache"
 	"github.com/garyburd/redigo/redis"
+	"github.com/qq976739120/zhihu-golang-web/cache"
 	"fmt"
 	"encoding/json"
 	"github.com/jinzhu/gorm"
 	"strconv"
 	"strings"
-	"github.com/zhihu-golang-web/pkg/logging"
+	"github.com/qq976739120/zhihu-golang-web/pkg/logging"
 	"time"
-	"github.com/zhihu-golang-web/pkg/msg"
+	"github.com/qq976739120/zhihu-golang-web/pkg/msg"
 )
 
 type Product struct {

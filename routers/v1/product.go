@@ -3,11 +3,11 @@ package v1
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/Unknwon/com"
-	"github.com/zhihu-golang-web/models"
-	"github.com/zhihu-golang-web/pkg/setting"
-	"github.com/zhihu-golang-web/pkg/util"
+	"github.com/qq976739120/zhihu-golang-web/models"
+	"github.com/qq976739120/zhihu-golang-web/pkg/setting"
+	"github.com/qq976739120/zhihu-golang-web/pkg/util"
 	"net/http"
-	"github.com/zhihu-golang-web/pkg/msg"
+	"github.com/qq976739120/zhihu-golang-web/pkg/msg"
 )
 
 func GetProduct(c *gin.Context) {

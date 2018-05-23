@@ -6,7 +6,7 @@ import (
 "github.com/gin-gonic/gin"
 "github.com/Unknwon/com"
 
-"github.com/zhihu-golang-web/pkg/setting"
+"github.com/qq976739120/zhihu-golang-web/pkg/setting"
 )
 
 func GetPage(c *gin.Context) int {
