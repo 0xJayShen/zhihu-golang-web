@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"zhihu-golang-web/pkg/setting"
-	"zhihu-golang-web/routers"
+	"github.com/zhihu-golang-web/pkg/setting"
+	"github.com/zhihu-golang-web/routers"
 
 	"reflect"
 	"time"

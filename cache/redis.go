@@ -5,7 +5,7 @@ import (
 
 	"fmt"
 	"time"
-	"zhihu-golang-web/pkg/setting"
+	"github.com/zhihu-golang-web/pkg/setting"
 )
 var (
 	RedisPool *redis.Pool

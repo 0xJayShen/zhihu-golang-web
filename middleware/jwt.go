@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"zhihu-golang-web/pkg/util"
-	"zhihu-golang-web/pkg/msg"
+	"github.com/zhihu-golang-web/pkg/util"
+	"github.com/zhihu-golang-web/pkg/msg"
 )
 
 func JWT() gin.HandlerFunc {
