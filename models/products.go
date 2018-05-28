@@ -6,11 +6,11 @@ import (
 	"fmt"
 	"encoding/json"
 	"github.com/jinzhu/gorm"
-	"strconv"
-	"strings"
 	"github.com/qq976739120/zhihu-golang-web/pkg/logging"
 	"time"
 	"github.com/qq976739120/zhihu-golang-web/pkg/msg"
+	"github.com/qq976739120/zhihu-golang-web/pkg/util"
+	"reflect"
 )
 
 type Product struct {
@@ -55,9 +55,12 @@ func GetProductTotal(maps interface{}) (count int) {
 func IsProductCacheExit(id int) bool {
 	conn := cache.RedisPool.Get()
 	defer conn.Close()
-	is_key_exit, err := redis.Bool(conn.Do("EXISTS", id))
+
+	key_name := util.Merge_name_helper("shop_product", id)
+
+	is_key_exit, err := redis.Bool(conn.Do("EXISTS", key_name))
 	if err != nil {
-		logging.Error("缓存中查询商品出错 %v", id, err, time.Now().Format(msg.TIME_FORMAT))
+		logging.Error("缓存中查询商品出错", id, err, time.Now().Format(msg.TIME_FORMAT))
 	}
 	if is_key_exit {
 		return true
@@ -79,27 +82,25 @@ func GetProduct(id int) interface{} {
 	exit := IsProductCacheExit(id)
 	conn := cache.RedisPool.Get()
 	defer conn.Close()
+	key_name := util.Merge_name_helper("shop_product", id)
+
 	if exit {
-		var info_map map[string]interface{}
-		valueGet, err := redis.Bytes(conn.Do("GET", id))
-
-		if err != nil {
-			logging.Error("缓存中取 %v 出错", id, err, time.Now().Format(msg.TIME_FORMAT))
+		var res map[string]interface{}
+		var category_json map[string]interface{}
+		res = make(map[string]interface{})
+		res_bytes, _ := redis.StringMap(conn.Do("HGETALL", key_name))
+		for k,v := range res_bytes{
+			res[k] = v
 		}
-
-		err = json.Unmarshal(valueGet, &info_map)
-
-		if err != nil {
-			logging.Error("反序列化出错 %v", id, err, time.Now().Format(msg.TIME_FORMAT))
-		}
-		return info_map
-
+		fmt.Println(res["category"],reflect.TypeOf(res["category"]))
+		err :=json.Unmarshal([]byte(res_bytes["category"]),&category_json)
+		fmt.Println(err)
+		res["category"] = category_json
+		return res
 	} else {
 		var product Product
-		err := db.Where("id = ? ", id).First(&product)
-		key_name := strings.Join([]string{"shop_product", strconv.Itoa(id)}, "_")
+		err := db.Preload("Category").Where("id = ? ", id).First(&product)
 		if err.Error == gorm.ErrRecordNotFound {
-			fmt.Println("找不到商品")
 			valu_map := map[string]int{"id": id, "state": -1}
 			value_json, err := json.Marshal(valu_map)
 			_, err = conn.Do("SET", key_name, value_json)
@@ -108,17 +109,29 @@ func GetProduct(id int) interface{} {
 			}
 			return valu_map
 		}
-		product_json, _ := json.Marshal(product)
-
-		_, e := conn.Do("SET", key_name, product_json, "EX", "100000")
-		if e != nil {
-			logging.Error("存缓存出错 %v", id, time.Now().Format(msg.TIME_FORMAT))
+		category_json,_ := json.Marshal(util.ToMap(product.Category))
+		m := map[string]interface{}{
+			"id":       product.ID,
+			"name":     product.Name,
+			"total":    product.Total,
+			"left":     product.Left,
+			"state":    product.State,
+			"des":      product.Des,
+			"category": category_json,
 		}
-		return product
+		//value, _ := json.Marshal(m)
+		//
+		//if _, e := conn.Do("SET", key_name, value, "EX", 10000); e != nil {
+		//	logging.Error("存缓存出错 id---", id, time.Now().Format(msg.TIME_FORMAT))
+		//}
+		_, er := conn.Do("HMSET", redis.Args{}.Add(key_name).AddFlat(m)...)
+		fmt.Println(er)
+
+		return m
 	}
 }
 func DeleteProduct(id int) bool {
-	key_name := strings.Join([]string{"shop_product", strconv.Itoa(id)}, "_")
+	key_name := util.Merge_name_helper("shop_product", id)
 	conn := cache.RedisPool.Get()
 	exit := IsProductCacheExit(id)
 	defer conn.Close()
@@ -132,17 +145,22 @@ func DeleteProduct(id int) bool {
 	return true
 }
 
-func BuyProduct(id int) (product Product) {
+//
+func BuyProduct(id int) bool {
 	conn := cache.RedisPool.Get()
 	defer conn.Close()
-
-	conn.Do("Watch")
 	exit := IsProductCacheExit(id)
+	key_name := util.Merge_name_helper("shop_product", id)
 	if exit {
-		conn.Do("DEL", id)
-	} else {
+		conn.Do("hincrby", key_name, "left", -1)
 
+	} else {
+		exit = IsProductDBExit(id)
+		if exit {
+			db.Exec("update shop_student set left=left-1")
+		} else {
+			return false
+		}
 	}
-	db.Exec("update blog_product set left=left - 1 where id = 1")
-	return
+	return true
 }
