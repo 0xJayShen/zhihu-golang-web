@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/qq976739120/zhihu-golang-web/pkg/setting"
 	"github.com/qq976739120/zhihu-golang-web/routers/v1"
-	//"zhihu-golang-web/middleware"
 )
 
 func InitRouter() *gin.Engine {

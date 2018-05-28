@@ -3,7 +3,6 @@ package routers
 import (
 	"net/http"
 	"github.com/gin-gonic/gin"
-	//"github.com/astaxie/beego/validation"
 	"github.com/qq976739120/zhihu-golang-web/pkg/msg"
 	"github.com/qq976739120/zhihu-golang-web/models"
 	"github.com/qq976739120/zhihu-golang-web/pkg/util"

@@ -1,0 +1,31 @@
+---
+- server:
+    name: svr01
+    port:
+    readtimeout:
+    writetimeout:
+
+- log:
+    level: info
+    path: /tmp/server
+
+- pprof:
+    enable: true
+    listen: 0.0.0.0:6060
+
+- etcd:
+    enable: false
+    addr: etcd:2379
+    path: /etl/producer
+    leasettl: 60
+
+- database:
+    type: mysql
+    host: 127.0.0.1
+    port: 3306
+    user: root
+    passwd: root
+
+- redis:
+    host: 127.0.0.1
+    port: 6389
