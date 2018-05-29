@@ -22,31 +22,28 @@ type App struct {
 type RunMode struct {
 	RUN_MODE string
 }
-type DataBase struct{
-	TYPE string
-	USER string
-	PASSWORD string
-	HOST string
-	NAME string
+type DataBase struct {
+	TYPE         string
+	USER         string
+	PASSWORD     string
+	HOST         string
+	NAME         string
 	TABLE_PREFIX string
-
 }
-type Redis struct{
-	RedisAddress string
-	RedisMaxIdle int
-	RedisMaxActive int
+type Redis struct {
+	RedisAddress     string
+	RedisMaxIdle     int
+	RedisMaxActive   int
 	RedisIdleTimeout int
 }
 
-
-
 var (
-	Cfg      *ini.File
-	RunMode_ *RunMode
-	Server_  *Server
-	App_     *App
+	Cfg       *ini.File
+	RunMode_  *RunMode
+	Server_   *Server
+	App_      *App
 	DataBase_ *DataBase
-	Redis_ *Redis
+	Redis_    *Redis
 )
 
 func init() {
@@ -67,9 +64,8 @@ func LoadBase() {
 	RunMode_ = new(RunMode)
 	err := Cfg.MapTo(RunMode_)
 	if err != nil {
-		fmt.Println(err,"1")
+		fmt.Println(err, "1")
 	}
-
 }
 
 func LoadServer() {
@@ -82,22 +78,22 @@ func LoadServer() {
 
 func LoadApp() {
 	App_ = new(App)
-	err :=  Cfg.Section("App").MapTo(App_)
+	err := Cfg.Section("App").MapTo(App_)
 	if err != nil {
 
 	}
 }
-func LoadDataBase(){
+func LoadDataBase() {
 	DataBase_ = new(DataBase)
-	err :=  Cfg.Section("DataBase").MapTo(DataBase_)
+	err := Cfg.Section("DataBase").MapTo(DataBase_)
 	if err != nil {
 
 	}
 }
 
-func LoadRedis(){
+func LoadRedis() {
 	Redis_ = new(Redis)
-	err :=  Cfg.Section("Redis").MapTo(Redis_)
+	err := Cfg.Section("Redis").MapTo(Redis_)
 	if err != nil {
 
 	}
