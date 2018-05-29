@@ -32,5 +32,17 @@ CREATE TABLE `shop_category` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8
   COMMENT ='商品类别';
+CREATE TABLE `shop_auth` (
+  `id`          INT UNSIGNED AUTO_INCREMENT,
+  `created_at`  TIMESTAMP    NULL,
+  `updated_at`  TIMESTAMP    NULL,
+  `deleted_at`  TIMESTAMP    NULL,
+  `username`   VARCHAR(255) NOT NULL,
+  `password`   VARCHAR(255) NOT NULL,
 
+  PRIMARY KEY (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
+  COMMENT ='用户';
 
