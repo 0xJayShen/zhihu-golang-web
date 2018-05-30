@@ -3,12 +3,13 @@ package util
 import (
 "time"
 
-jwt "github.com/dgrijalva/jwt-go"
+"github.com/dgrijalva/jwt-go"
 
-"github.com/qq976739120/zhihu-golang-web/pkg/setting"
 )
 
-var jwtSecret = []byte(setting.App_.JWT_SECRET)
+//var jwtSecret = []byte(setting.App_.JWT_SECRET)
+
+var jwtSecret []byte
 
 type Claims struct {
 	Username string `json:"username"`

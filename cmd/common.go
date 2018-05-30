@@ -6,12 +6,12 @@ import (
 	jww "github.com/spf13/jwalterweatherman"
 	"github.com/asdfsx/lumberjack"
 	"github.com/spf13/viper"
-	"github.com/asdfsx/zhihu-golang-web/server"
+	"github.com/asdfsx/zhihu-golang-web/common"
 )
 
 var (
 	cfgFile string
-	config server.Config
+	config common.Config
 	logger  *lumberjack.Logger
 	rotateTime time.Time
 )

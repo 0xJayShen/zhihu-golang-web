@@ -7,17 +7,17 @@ import (
 	"fmt"
 	"time"
 	"github.com/asdfsx/zhihu-golang-web/routers"
+	"github.com/asdfsx/zhihu-golang-web/common"
 )
 
 type Server struct {
-	config *Config
+	config *common.Config
     svr    *http.Server
 }
 
-func NewServer(config *Config) *Server {
+func NewServer(config *common.Config) *Server {
 	router := routers.InitRouter()
-	return &Server{config,
-	&http.Server{
+	return &Server{config, &http.Server{
 		Addr:           fmt.Sprintf(":%d", config.Server.Port),
 		Handler:        router,
 		ReadTimeout:    time.Duration(config.Server.ReadTimeout),

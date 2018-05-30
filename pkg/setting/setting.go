@@ -1,7 +1,6 @@
 package setting
 
 import (
-	"log"
 	"time"
 
 	"github.com/go-ini/ini"
@@ -49,20 +48,20 @@ var (
 	Redis_ *Redis
 )
 
-func init() {
-	var err error
-	Cfg, err = ini.Load("conf/app.ini")
-	if err != nil {
-		fmt.Println(err)
-		log.Fatalf("Fail to parse 'conf/app.ini': %v", err)
-	}
-
-	LoadBase()
-	LoadServer()
-	LoadApp()
-	LoadDataBase()
-	LoadRedis()
-}
+//func init() {
+//	var err error
+//	Cfg, err = ini.Load("conf/app.ini")
+//	if err != nil {
+//		fmt.Println(err)
+//		log.Fatalf("Fail to parse 'conf/app.ini': %v", err)
+//	}
+//
+//	LoadBase()
+//	LoadServer()
+//	LoadApp()
+//	LoadDataBase()
+//	LoadRedis()
+//}
 func LoadBase() {
 	RunMode_ = new(RunMode)
 	err := Cfg.MapTo(RunMode_)

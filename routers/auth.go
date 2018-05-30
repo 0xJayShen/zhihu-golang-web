@@ -3,9 +3,9 @@ package routers
 import (
 	"net/http"
 	"github.com/gin-gonic/gin"
-	"github.com/qq976739120/zhihu-golang-web/pkg/msg"
-	"github.com/qq976739120/zhihu-golang-web/models"
-	"github.com/qq976739120/zhihu-golang-web/pkg/util"
+	"github.com/asdfsx/zhihu-golang-web/pkg/msg"
+	"github.com/asdfsx/zhihu-golang-web/models"
+	"github.com/asdfsx/zhihu-golang-web/pkg/util"
 )
 
 func GetAuth(c *gin.Context) {

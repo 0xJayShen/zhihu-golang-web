@@ -27,15 +27,15 @@ const (
 	FATAL
 )
 
-func init() {
-	filePath := getLogFileFullPath()
-	F = openLogFile(filePath)
-	//创建一个新的日志记录器。out定义要写入日志数据的IO句柄。prefix定义每个生成的日志行的开头。flag定义了日志记录属性
-	//func New(out io.Writer, prefix string, flag int) *Logger {
-	//	return &Logger{out: out, prefix: prefix, flag: flag}
-	//}
-	logger = log.New(F, DefaultPrefix, log.LstdFlags)
-}
+//func init() {
+//	filePath := getLogFileFullPath()
+//	F = openLogFile(filePath)
+//	//创建一个新的日志记录器。out定义要写入日志数据的IO句柄。prefix定义每个生成的日志行的开头。flag定义了日志记录属性
+//	//func New(out io.Writer, prefix string, flag int) *Logger {
+//	//	return &Logger{out: out, prefix: prefix, flag: flag}
+//	//}
+//	logger = log.New(F, DefaultPrefix, log.LstdFlags)
+//}
 
 func Debug(v ...interface{}) {
 	setPrefix(DEBUG)

@@ -15,7 +15,7 @@ import (
 var serveCmd = &cobra.Command{
 	Use:   "serve",
 	Short: "web server's main process",
-	Long:  "read the config file, read logs according to the configuration, put logs into kafka",
+	Long:  "read the config file, read logs according to the configuration",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		err := readConfig()
 		if err != nil{
@@ -31,7 +31,7 @@ var serveCmd = &cobra.Command{
 
 func init() {
 	RootCmd.AddCommand(serveCmd)
-	serveCmd.Flags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.kafkaproducer.yaml)")
+	serveCmd.Flags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.server.yaml)")
 }
 
 func logrotate(){

@@ -2,8 +2,8 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/qq976739120/zhihu-golang-web/pkg/setting"
-	"github.com/qq976739120/zhihu-golang-web/routers/v1"
+	"github.com/asdfsx/zhihu-golang-web/pkg/setting"
+	"github.com/asdfsx/zhihu-golang-web/routers/v1"
 )
 
 func InitRouter() *gin.Engine {

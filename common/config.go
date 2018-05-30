@@ -1,4 +1,4 @@
-package server
+package common
 
 //all configs inside config file
 type Config struct {
@@ -22,11 +22,13 @@ type Config struct {
 		Path     string
 		LeaseTTL int64
 	}
-	Mysql struct {
-		Host     string
-		Port     int64
-		User     string
-		Passwd   string
+	Database struct {
+		Type        string
+		Host        string
+		Port        int64
+		User        string
+		Passwd      string
+		TablePrefix string `mapstructure:"table_prefix"`
 	}
 	Redis struct {
 		Host     string

@@ -158,15 +158,11 @@
   branch = "master"
   name = "github.com/qq976739120/zhihu-golang-web"
   packages = [
-    "cache",
-    "models",
-    "pkg/logging",
     "pkg/msg",
     "pkg/setting",
-    "pkg/util",
-    "routers/v1"
+    "pkg/util"
   ]
-  revision = "10684bbd73213e378b6e3e2472082c6750e86cb4"
+  revision = "120a9ed8d87f9b36fe44ee574e025b2c296e5f12"
 
 [[projects]]
   name = "github.com/smartystreets/assertions"
@@ -267,6 +263,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "455b94c734a7b62d5a6211a4ccc4a779dcc93e2cc637c8598bac01810cfb75ee"
+  inputs-digest = "2778bc97ea72129769350628405f5c9f6dbf86f7121315044b03e4d684ac3d93"
   solver-name = "gps-cdcl"
   solver-version = 1
