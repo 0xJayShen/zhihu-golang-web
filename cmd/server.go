@@ -21,7 +21,7 @@ var serveCmd = &cobra.Command{
 		if err != nil{
 			return err
 		}
-		err = serve(cmd, args)
+		err = serveFunc(cmd, args)
 		if err == nil{
 			return err
 		}
@@ -45,7 +45,7 @@ func logrotate(){
 	}
 }
 
-func serve(cmd *cobra.Command, args []string) error {
+func serveFunc(cmd *cobra.Command, args []string) error {
 	jww.INFO.Printf("server name: %v\n", config.Server.Name)
 
 	ctx, cancel := context.WithCancel(context.Background())

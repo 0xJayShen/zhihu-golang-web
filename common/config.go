@@ -28,6 +28,7 @@ type Config struct {
 		Port        int64
 		User        string
 		Passwd      string
+		DBName      string
 		TablePrefix string `mapstructure:"table_prefix"`
 	}
 	Redis struct {
