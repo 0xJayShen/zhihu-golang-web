@@ -7,25 +7,39 @@ import (
 	"github.com/qq976739120/zhihu-golang-web/pkg/msg"
 	"github.com/qq976739120/zhihu-golang-web/models"
 	"github.com/qq976739120/zhihu-golang-web/pkg/util"
+	"github.com/qq976739120/zhihu-golang-web/cache"
 )
 
 func GetAuth(c *gin.Context) {
-	username := c.Query("username")
-	password := c.Query("password")
+	username := c.PostForm("username")
+	password := c.PostForm("password")
 
 	data := make(map[string]interface{})
 	code := msg.INVALID_PARAMS
 
-	isExist := models.CheckAuth(username, password)
-	if isExist {
+	user_id := models.CheckAuth(username, password)
+	if user_id > 0  {
+		conn := cache.RedisPool.Get()
+		defer conn.Close()
+
 		token, err := util.GenerateToken(username, password)
+		conn.Do("SET",token,user_id)
 		if err != nil {
 			code = msg.ERROR_AUTH_TOKEN
 		} else {
 			data["token"] = token
-
 			code = msg.SUCCESS
 		}
+
+		cookie:=&http.Cookie{
+			Name:   "token",
+			Value:    token,
+			Path:     "/",
+			HttpOnly: false,
+			MaxAge:   msg.COOKIE_MAX_MAX_AGE,
+		}
+
+		http.SetCookie(c.Writer,cookie)
 
 	} else {
 		code = msg.ERROR_AUTH

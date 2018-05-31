@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"github.com/qq976739120/zhihu-golang-web/pkg/util"
 	"fmt"
+	"github.com/qq976739120/zhihu-golang-web/cache"
+	"github.com/garyburd/redigo/redis"
 )
 
 //func JWT() gin.HandlerFunc {
@@ -50,25 +52,34 @@ func JWT() gin.HandlerFunc {
 
 		code = msg.SUCCESS
 		cookie, err := c.Request.Cookie("token")
-		if err != nil{
+
+		if err != nil {
 			fmt.Println(err)
 		}
-		if cookie != nil{
+		if cookie != nil {
 			token := cookie.Value
+
 			if token == "" {
 				code = msg.INVALID_PARAMS
 			} else {
-				claims, err := util.ParseToken(token)
-				if err != nil {
-					code = msg.ERROR_AUTH_CHECK_TOKEN_FAIL
-				} else if time.Now().Unix() > claims.ExpiresAt {
-					code = msg.ERROR_AUTH_CHECK_TOKEN_TIMEOUT
+				conn := cache.RedisPool.Get()
+				defer conn.Close()
+				exit_token_redis, _ := redis.Bool(conn.Do("EXISTS", token))
+				if exit_token_redis {
+					token_redis, _ := redis.String(conn.Do("GET", token))
+					if token == token_redis {
+						claims, err := util.ParseToken(token)
+						if err != nil {
+							code = msg.ERROR_AUTH_CHECK_TOKEN_FAIL
+						} else if time.Now().Unix() > claims.ExpiresAt {
+							code = msg.ERROR_AUTH_CHECK_TOKEN_TIMEOUT
+						}
+					}
 				}
 			}
-		}else {
+		} else {
 			code = msg.INVALID_PARAMS
 		}
-
 
 		if code != msg.SUCCESS {
 			c.JSON(http.StatusUnauthorized, gin.H{
@@ -76,7 +87,6 @@ func JWT() gin.HandlerFunc {
 				"msg":  msg.GetMsg(code),
 				"data": data,
 			})
-
 			c.Abort()
 			return
 		}

@@ -1,8 +1,10 @@
 package msg
 
+import "time"
+
 const (
 	TIME_FORMAT  = "2006-01-02 15:04:05"
-
+	COOKIE_MAX_MAX_AGE     = int(time.Hour * 24 / time.Second)
 	SUCCESS = 200
 	ERROR = 500
 	INVALID_PARAMS = 400
