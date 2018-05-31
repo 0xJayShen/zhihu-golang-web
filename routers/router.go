@@ -15,7 +15,7 @@ func InitRouter() *gin.Engine {
 
 	r.Use(gin.Recovery())
 	gin.SetMode(setting.RunMode_.RUN_MODE)
-	r.GET("/auth", GetAuth)
+	r.POST("/auth", GetAuth)
 	apiv1 := r.Group("/api/v1")
 	apiv1.Use(middleware.JWT())
 	{

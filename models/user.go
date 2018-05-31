@@ -1,6 +1,8 @@
 package models
 
-import "github.com/jinzhu/gorm"
+import (
+	"github.com/jinzhu/gorm"
+)
 
 type Auth struct {
 	gorm.Model
@@ -11,11 +13,10 @@ type Auth struct {
 
 func CheckAuth(username, password string) uint {
 	var auth Auth
-	db.Select("id").Where(Auth{Username: username, Password: password}).First(&auth)
+	db.Where("username = ? AND password = ?",username,password).First(&auth)
 	if auth.ID > 0 {
-
 		return auth.ID
 	}
 
-	return -1
+	return 0
 }
