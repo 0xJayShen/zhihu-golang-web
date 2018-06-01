@@ -30,3 +30,7 @@ database:
 redis:
   host: 127.0.0.1
   port: 6389
+
+kafka:
+  broker: 127.0.0.1:1234
+  topic: shop

@@ -9,6 +9,8 @@ import (
 func TestReadconfig(t *testing.T){
 	stubs := gostub.New()
 	stubs.Stub(&cfgFile, "../server.yml")
+	defer stubs.Reset()
+
 	convey.Convey("readconfig", t, func(){
 		convey.So(readConfig(), convey.ShouldBeNil)
 	})

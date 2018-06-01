@@ -29,7 +29,7 @@ func init() {
 }
 
 func migrateFunc(cmd *cobra.Command, args []string) error {
-	err := migrate.CreateDBConnection(config.Database.Type, config.Database.User, config.Database.Passwd,
+	err := migrate.ConnectDB(config.Database.Type, config.Database.User, config.Database.Passwd,
 		config.Database.Host, config.Database.Port, config.Database.DBName, config.Database.TablePrefix)
 	if err != nil{
 		return err

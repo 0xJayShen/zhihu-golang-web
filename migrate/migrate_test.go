@@ -3,37 +3,33 @@ package migrate
 import (
 	"testing"
 	"github.com/prashantv/gostub"
-"github.com/smartystreets/goconvey/convey"
-	"github.com/pingcap/tidb/config"
+    "github.com/smartystreets/goconvey/convey"
 )
+
+var dbType, user, password, host, dbName, tablePrefix string
+var port int64
 
 func TestReadconfig(t *testing.T){
 	stubs := gostub.New()
-	stubs.Stub(&cfgFile, "../server.yml")
-	convey.Convey("readconfig", t, func(){
-		convey.So(readConfig(), convey.ShouldBeNil)
-	})
-	convey.Convey("test level", t, func(){
-		convey.So(config.Log.Level, convey.ShouldEqual, "info")
-	})
-	convey.Convey("test log Path", t, func(){
-		convey.So(config.Log.Path, convey.ShouldEqual, "/tmp/server")
+	stubs.Stub(&dbType, "mysql")
+	stubs.Stub(&user, "root")
+	stubs.Stub(&password, "root")
+	stubs.Stub(&host, "127.0.0.1")
+	stubs.Stub(&port, "3306")
+	stubs.Stub(&dbName, "shop")
+	stubs.Stub(&tablePrefix, "shop_")
+	defer stubs.Reset()
+
+	convey.Convey("create connection", t, func(){
+		convey.So(ConnectDB(dbType, user, password, host, port, dbName, tablePrefix), convey.ShouldBeNil)
 	})
 
-	convey.Convey("test pprof", t, func(){
-		convey.So(config.Pprof.Listen, convey.ShouldEqual, "0.0.0.0:6060")
+	convey.Convey("migrate", t, func(){
+		convey.So(Migrate(), convey.ShouldBeNil)
 	})
 
-	convey.Convey("test etcd", t, func(){
-		convey.So(config.Etcd.Path, convey.ShouldEqual, "/server")
-	})
-
-	convey.Convey("test database", t, func(){
-		convey.So(config.Database.TablePrefix, convey.ShouldEqual, "shop_")
-	})
-
-	convey.Convey("test redis", t, func(){
-		convey.So(config.Redis.Port, convey.ShouldEqual, 6389)
+	convey.Convey("close", t, func(){
+		convey.So(Close(), convey.ShouldBeNil)
 	})
 }
 

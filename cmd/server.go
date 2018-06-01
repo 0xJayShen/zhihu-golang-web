@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"os"
-	"os/signal"
 	"time"
 	"context"
 
@@ -34,45 +32,42 @@ func init() {
 	serveCmd.Flags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.server.yaml)")
 }
 
-func logrotate(){
+func logrotate(ctx context.Context){
 	//判断是否应该rotate日志
-	now := time.Now()
-	if now.Day() > rotateTime.Day() {
-		if err := logger.Rotate(); err != nil {
-			jww.ERROR.Printf("Failed to rotate the logger %v\n", err)
+	ticker := time.Tick(5 * time.Minute)
+	for {
+		select {
+		case <- ctx.Done():
+			return
+		case <-ticker:
+			now := time.Now()
+			if now.Day() > rotateTime.Day() {
+				if err := logger.Rotate(); err != nil {
+					jww.ERROR.Printf("Failed to rotate the logger %v\n", err)
+				}
+				rotateTime = now
+			}
 		}
-		rotateTime = now
 	}
 }
 
 func serveFunc(cmd *cobra.Command, args []string) error {
 	jww.INFO.Printf("server name: %v\n", config.Server.Name)
 
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+	ctx := ContextWithSignal(context.Background())
 
-	signalChan := make(chan os.Signal, 1)
-	signal.Notify(signalChan, os.Interrupt)
-	defer close(signalChan)
+	go logrotate(ctx)
 
-	ticker := time.Tick(5 * time.Minute)
-
-	svr := server.NewServer(&config)
-	defer svr.Close()
-
-	err := svr.Serv(ctx)
-	if err != nil {
-		jww.ERROR.Println(err)
+	svr, err := server.NewServer(&config)
+	if err != nil{
 		return err
 	}
+	defer svr.Close()
 
-	for {
-		select {
-			case <- signalChan:
-				cancel()
-				return nil
-			case <-ticker:
-				logrotate()
-		}
-	}
+	svr.StartWithContext(ctx)
+
+	svr.Wait()
+
+	jww.INFO.Println("Shutting down")
+	return nil
 }
