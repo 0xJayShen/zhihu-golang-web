@@ -3,7 +3,6 @@ package setting
 import (
 	"log"
 	"time"
-
 	"github.com/go-ini/ini"
 	"fmt"
 )
@@ -37,6 +36,28 @@ type Redis struct {
 	RedisIdleTimeout int
 }
 
+type Kafka struct {
+	KafkaAddress string
+	Topic        string
+}
+type Logs struct {
+	LogPath string
+}
+type Collect struct {
+	LogPath  string
+	Topic    string
+	ChanSize int
+}
+type Elastic struct {
+	ESaddress string
+}
+
+type CollectList struct {
+	Collectlist [] Collect
+}
+
+var Collect__ CollectList
+
 var (
 	Cfg       *ini.File
 	RunMode_  *RunMode
@@ -44,6 +65,10 @@ var (
 	App_      *App
 	DataBase_ *DataBase
 	Redis_    *Redis
+	Kafka_    *Kafka
+	Logs_     *Logs
+	Collect_  *Collect
+	Elastic_  *Elastic
 )
 
 func init() {
@@ -59,12 +84,18 @@ func init() {
 	LoadApp()
 	LoadDataBase()
 	LoadRedis()
+	LoadLogs()
+	LoadCollect()
+	LoadKafka()
+	LoadElastic()
+	//伪造的 collect 切片
+	Collect__.Collectlist = append(Collect__.Collectlist, *Collect_)
 }
 func LoadBase() {
 	RunMode_ = new(RunMode)
 	err := Cfg.MapTo(RunMode_)
 	if err != nil {
-		fmt.Println(err, "1")
+
 	}
 }
 
@@ -94,6 +125,36 @@ func LoadDataBase() {
 func LoadRedis() {
 	Redis_ = new(Redis)
 	err := Cfg.Section("Redis").MapTo(Redis_)
+	if err != nil {
+
+	}
+}
+func LoadKafka() {
+	Kafka_ = new(Kafka)
+	err := Cfg.Section("Kafka").MapTo(Kafka_)
+	if err != nil {
+
+	}
+}
+func LoadLogs() {
+	Logs_ = new(Logs)
+	err := Cfg.Section("Logs").MapTo(Logs_)
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
+func LoadCollect() {
+	Collect_ = new(Collect)
+	err := Cfg.Section("Collect").MapTo(Collect_)
+	if err != nil {
+
+	}
+}
+
+func LoadElastic() {
+	Elastic_ = new(Elastic)
+	err := Cfg.Section("Elastic").MapTo(Elastic_)
 	if err != nil {
 
 	}
