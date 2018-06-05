@@ -22,9 +22,11 @@ type Product struct {
 	Des        string   `json:"des"` //列名是 des
 	CategoryId int      `json:"category_id"`
 	Category   Category `json:"category"`
+	ImgUrl  string `json:"img_url"`
 }
 
 func GetProducts(pageNum int, pageSize int, maps interface{}) (products []Product) {
+
 	db.Preload("Category").Where(maps).Offset(pageNum).Limit(pageSize).Find(&products)
 	return
 }
@@ -150,16 +152,12 @@ func BuyProduct(id int) bool {
 }
 func SecondKill(user_id int)bool {
 	//总量
-	var len_list int
 	all_num  := 100
 	conn := cache.RedisPool.Get()
 	defer conn.Close()
-	len_reply,err := conn.Do("LLEN","second_kill")
-	switch v := len_reply.(type) {
-	case int:
-		len_list = v
-	}
-	if len_list >= all_num{
+	len_reply,err := redis.Int(conn.Do("LLEN","second_kill"))
+
+	if len_reply >= all_num{
 		return false
 	}else{
 		_, err = conn.Do("LPUSH", "second_kill", user_id)

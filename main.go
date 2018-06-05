@@ -24,8 +24,8 @@ func main() {
 	s := &http.Server{
 		Addr:           fmt.Sprintf(":%d", setting.Server_.HTTP_PORT),
 		Handler:        router,
-		ReadTimeout:    setting.Server_.READ_TIMEOUT * time.Second,
-		WriteTimeout:   setting.Server_.WRITE_TIMEOUT * time.Second,
+		ReadTimeout:    setting.Server_.READ_TIMEOUT ,
+		WriteTimeout:   setting.Server_.WRITE_TIMEOUT ,
 		MaxHeaderBytes: 1 << 20,
 	}
 	err := util.InitTail(settings.Collect__.Collectlist, settings.Collect_.ChanSize)

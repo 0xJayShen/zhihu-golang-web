@@ -14,8 +14,19 @@ type Server struct {
 }
 
 type App struct {
-	PAGE_SIZE  int
-	JWT_SECRET string
+	PAGE_SIZE       int
+	JWT_SECRET      string
+	RuntimeRootPath string
+
+	ImagePrefixUrl string
+	ImageSavePath  string
+	ImageMaxSize   int
+	ImageAllowExts []string
+
+	LogSavePath string
+	LogSaveName string
+	LogFileExt  string
+	TimeFormat  string
 }
 
 type RunMode struct {
@@ -34,15 +45,14 @@ type Redis struct {
 	RedisMaxIdle     int
 	RedisMaxActive   int
 	RedisIdleTimeout int
+	PassWord         string
 }
 
 type Kafka struct {
 	KafkaAddress string
 	Topic        string
 }
-type Logs struct {
-	LogPath string
-}
+
 type Collect struct {
 	LogPath  string
 	Topic    string
@@ -60,18 +70,18 @@ var Collect__ CollectList
 
 var (
 	Cfg       *ini.File
-	RunMode_  *RunMode
-	Server_   *Server
-	App_      *App
-	DataBase_ *DataBase
-	Redis_    *Redis
-	Kafka_    *Kafka
-	Logs_     *Logs
-	Collect_  *Collect
-	Elastic_  *Elastic
+	RunMode_  = &RunMode{}
+	Server_   = &Server{}
+	App_      = &App{}
+	DataBase_ = &DataBase{}
+	Redis_    = &Redis{}
+	Kafka_    = &Kafka{}
+
+	Collect_ = &Collect{}
+	Elastic_ = Elastic{}
 )
 
-func init() {
+func InitSettings() {
 	var err error
 	Cfg, err = ini.Load("conf/app.ini")
 	if err != nil {
@@ -80,14 +90,17 @@ func init() {
 	}
 
 	LoadBase()
-	LoadServer()
-	LoadApp()
-	LoadDataBase()
-	LoadRedis()
-	LoadLogs()
-	LoadCollect()
-	LoadKafka()
-	LoadElastic()
+
+	mapTo("App", App_)
+	mapTo("Server", Server_)
+	mapTo("DataBase", DataBase_)
+	mapTo("Redis", Redis_)
+	mapTo("Collect", Collect_)
+	mapTo("Kafka", Kafka_)
+	mapTo("Elastic", Elastic_)
+
+	Server_.READ_TIMEOUT = Server_.READ_TIMEOUT * time.Second
+	Server_.WRITE_TIMEOUT = Server_.WRITE_TIMEOUT * time.Second
 	//伪造的 collect 切片
 	Collect__.Collectlist = append(Collect__.Collectlist, *Collect_)
 }
@@ -95,67 +108,13 @@ func LoadBase() {
 	RunMode_ = new(RunMode)
 	err := Cfg.MapTo(RunMode_)
 	if err != nil {
-
+		fmt.Println("初始化 base失败")
 	}
 }
 
-func LoadServer() {
-	Server_ = new(Server)
-	err := Cfg.Section("Server").MapTo(Server_)
+func mapTo(section string, v interface{}) {
+	err := Cfg.Section(section).MapTo(v)
 	if err != nil {
-
-	}
-}
-
-func LoadApp() {
-	App_ = new(App)
-	err := Cfg.Section("App").MapTo(App_)
-	if err != nil {
-
-	}
-}
-func LoadDataBase() {
-	DataBase_ = new(DataBase)
-	err := Cfg.Section("DataBase").MapTo(DataBase_)
-	if err != nil {
-
-	}
-}
-
-func LoadRedis() {
-	Redis_ = new(Redis)
-	err := Cfg.Section("Redis").MapTo(Redis_)
-	if err != nil {
-
-	}
-}
-func LoadKafka() {
-	Kafka_ = new(Kafka)
-	err := Cfg.Section("Kafka").MapTo(Kafka_)
-	if err != nil {
-
-	}
-}
-func LoadLogs() {
-	Logs_ = new(Logs)
-	err := Cfg.Section("Logs").MapTo(Logs_)
-	if err != nil {
-		fmt.Println(err)
-	}
-}
-
-func LoadCollect() {
-	Collect_ = new(Collect)
-	err := Cfg.Section("Collect").MapTo(Collect_)
-	if err != nil {
-
-	}
-}
-
-func LoadElastic() {
-	Elastic_ = new(Elastic)
-	err := Cfg.Section("Elastic").MapTo(Elastic_)
-	if err != nil {
-
+		fmt.Println(err, "初始化配置文件")
 	}
 }

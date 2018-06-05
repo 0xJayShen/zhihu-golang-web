@@ -1,39 +1,43 @@
 package logging
 
 import (
+	"fmt"
 	"log"
 	"os"
-	"runtime"
 	"path/filepath"
-	"fmt"
+	"runtime"
 )
 
 type Level int
 
 var (
 	F *os.File
+
 	DefaultPrefix      = ""
 	DefaultCallerDepth = 2
+
 	logger     *log.Logger
 	logPrefix  = ""
 	levelFlags = []string{"DEBUG", "INFO", "WARN", "ERROR", "FATAL"}
 )
 
 const (
-	DEBUG   Level = iota
+	DEBUG Level = iota
 	INFO
 	WARNING
 	ERROR
 	FATAL
 )
 
-func init() {
-	filePath := getLogFileFullPath()
-	F = openLogFile(filePath)
-	//创建一个新的日志记录器。out定义要写入日志数据的IO句柄。prefix定义每个生成的日志行的开头。flag定义了日志记录属性
-	//func New(out io.Writer, prefix string, flag int) *Logger {
-	//	return &Logger{out: out, prefix: prefix, flag: flag}
-	//}
+func Setup() {
+	var err error
+	filePath := getLogFilePath()
+	fileName := getLogFileName()
+	F, err = openLogFile(fileName, filePath)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
 	logger = log.New(F, DefaultPrefix, log.LstdFlags)
 }
 
