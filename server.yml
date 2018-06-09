@@ -23,6 +23,7 @@ database:
   type: mysql
   host: 192.168.99.100
   port: 3306
+  dbname: shop
   user: root
   passwd: root
   table_prefix : shop_

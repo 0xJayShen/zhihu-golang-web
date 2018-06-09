@@ -17,8 +17,8 @@ import (
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Print the version number of KafkaProducer",
-	Long:  "All software has versions. This is KafkaProducer's.",
+	Short: "Print the version number of zhihu-golang-web",
+	Long:  "All software has versions. This is zhihu-golang-web's.",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		printServerVersion()
 		return nil

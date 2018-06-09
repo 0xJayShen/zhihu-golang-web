@@ -16,8 +16,8 @@ func TestReadconfig(t *testing.T){
 	stubs.Stub(&password, "root")
 	stubs.Stub(&host, "192.168.99.100")
 	stubs.Stub(&port, 3306)
-	stubs.Stub(&dbName, "shop")
-	stubs.Stub(&tablePrefix, "shop_")
+	stubs.Stub(&dbName, "shoptest")
+	stubs.Stub(&tablePrefix, "shoptes_")
 	defer stubs.Reset()
 
 	convey.Convey("create connection", t, func(){

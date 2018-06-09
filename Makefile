@@ -4,13 +4,13 @@ BUILD_DATE = `date +%FT%T%z`
 LDFLAGS = -ldflags "-X ${PACKAGE}/server.CommitHash=${COMMIT_HASH} -X ${PACKAGE}/server.BuildDate=${BUILD_DATE}"
 NOGI_LDFLAGS = -ldflags "-X ${PACKAGE}/server.BuildDate=${BUILD_DATE}"
 
-.PHONY: server
+.PHONY: server, vendor
 
 vendor: ## Install dep and sync server's vendored dependencies
 	go get -u github.com/golang/dep/cmd/dep
-	dep ensure
+	export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087; dep ensure
 
-server1: vendor ## Build server binary
+server1: 
 	go build ${LDFLAGS} ${PACKAGE}
 
 server: vendor ## Build server binary

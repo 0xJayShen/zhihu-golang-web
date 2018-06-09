@@ -3,18 +3,20 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"github.com/asdfsx/zhihu-golang-web/migrate"
+	"fmt"
 )
 
 // versionCmd represents the version command
 var migrateCmd = &cobra.Command{
 	Use:   "migrate",
-	Short: "create database & tables",
+	Short: "create database & tables 111",
 	Long:  "Create database & tables that application used.",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		err := readConfig()
 		if err != nil{
 			return err
 		}
+		fmt.Println("--------------")
 		err = migrateFunc(cmd, args)
 		if err != nil{
 			return err

@@ -7,9 +7,9 @@ import (
 )
 
 var RootCmd = &cobra.Command{
-	Use:   "kafkaproducer",
-	Short: "kafka data producer",
-	Long:  "read data from log file, reformat the data and put them into kafka",
+	Use:   "zhihu-golang-web",
+	Short: "zhihu-golang-web sample",
+	Long:  "zhihu-golang-web sample",
 	// RunE:         server,
 	SilenceUsage: true,
 }
