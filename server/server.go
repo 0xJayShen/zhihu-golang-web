@@ -86,11 +86,12 @@ func (s *Server) Stop() {
 	s.stopChan <- true
 }
 
-func connect(dbType, user, password, host string, port int64, dbName, tablePrefix string) (db *gorm.DB, err error) {
-	db, err = gorm.Open(dbType, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
+func connect(dbType, user, password, host string, port int, dbName, tablePrefix string) (db *gorm.DB, err error) {
+	db, err = gorm.Open(dbType, fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local",
 		user,
 		password,
 		host,
+		port,
 		dbName))
 	if err != nil{
 		jww.ERROR.Println(err)

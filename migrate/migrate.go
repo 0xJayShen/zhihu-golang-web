@@ -10,11 +10,12 @@ import (
 var db *gorm.DB
 var modelsRegisted []interface{} = []interface{}{&models.Auth{}, &models.Product{}, &models.Category{}}
 
-func connect(dbType, user, password, host string, port int64, dbName, tablePrefix string) (err error) {
-	db, err = gorm.Open(dbType, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
+func connect(dbType, user, password, host string, port int, dbName, tablePrefix string) (err error) {
+	db, err = gorm.Open(dbType, fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local",
 		user,
 		password,
 		host,
+		port,
 		dbName))
 	if err != nil{
 		jww.ERROR.Println(err)
@@ -23,7 +24,7 @@ func connect(dbType, user, password, host string, port int64, dbName, tablePrefi
 	return nil
 }
 
-func createDatabaseIfNotExists(dbType, user, password, host string, port int64, dbName, tablePrefix string) (err error) {
+func createDatabaseIfNotExists(dbType, user, password, host string, port int, dbName, tablePrefix string) (err error) {
 	err = connect(dbType, user, password, host , port , "mysql", tablePrefix)
 	if err != nil{
 		jww.ERROR.Println(err)
@@ -39,7 +40,7 @@ func createDatabaseIfNotExists(dbType, user, password, host string, port int64, 
 	return nil
 }
 
-func ConnectDB(dbType, user, password, host string, port int64, dbName, tablePrefix string) (err error) {
+func ConnectDB(dbType, user, password, host string, port int, dbName, tablePrefix string) (err error) {
 	err = createDatabaseIfNotExists(dbType, user, password, host , port , dbName, tablePrefix )
 	if err != nil{
 		jww.ERROR.Println(err)
@@ -64,7 +65,19 @@ func Close() error {
 }
 
 func Migrate() error {
-	if err := db.AutoMigrate(modelsRegisted).Error;err != nil{
+	if err := db.AutoMigrate(modelsRegisted...).Error;err != nil{
+		jww.ERROR.Println(err)
+		return err
+	}
+	return nil
+}
+
+func clean(dbName string) error{
+	if err := db.DropTable(modelsRegisted...).Error; err != nil{
+		jww.ERROR.Println(err)
+		return err
+	}
+	if err := db.Exec(fmt.Sprintf("drop database if exists `%s`", dbName)).Error; err != nil{
 		jww.ERROR.Println(err)
 		return err
 	}

@@ -25,7 +25,7 @@ type Config struct {
 	Database struct {
 		Type        string
 		Host        string
-		Port        int64
+		Port        int
 		User        string
 		Passwd      string
 		DBName      string

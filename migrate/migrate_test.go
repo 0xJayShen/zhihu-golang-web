@@ -7,15 +7,15 @@ import (
 )
 
 var dbType, user, password, host, dbName, tablePrefix string
-var port int64
+var port int
 
 func TestReadconfig(t *testing.T){
 	stubs := gostub.New()
 	stubs.Stub(&dbType, "mysql")
 	stubs.Stub(&user, "root")
 	stubs.Stub(&password, "root")
-	stubs.Stub(&host, "127.0.0.1")
-	stubs.Stub(&port, "3306")
+	stubs.Stub(&host, "192.168.99.100")
+	stubs.Stub(&port, 3306)
 	stubs.Stub(&dbName, "shop")
 	stubs.Stub(&tablePrefix, "shop_")
 	defer stubs.Reset()
@@ -26,6 +26,10 @@ func TestReadconfig(t *testing.T){
 
 	convey.Convey("migrate", t, func(){
 		convey.So(Migrate(), convey.ShouldBeNil)
+	})
+
+	convey.Convey("drop tables", t, func(){
+		convey.So(clean(dbName), convey.ShouldBeNil)
 	})
 
 	convey.Convey("close", t, func(){
