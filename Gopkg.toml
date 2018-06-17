@@ -30,10 +30,6 @@
   version = "1.0.0"
 
 [[constraint]]
-  name = "github.com/astaxie/beego"
-  version = "1.9.2"
-
-[[constraint]]
   name = "github.com/dgrijalva/jwt-go"
   version = "3.2.0"
 
@@ -52,10 +48,6 @@
 [[constraint]]
   name = "github.com/jinzhu/gorm"
   version = "1.9.1"
-
-[[constraint]]
-  branch = "master"
-  name = "github.com/qq976739120/zhihu-golang-web"
 
 [prune]
   go-tests = true

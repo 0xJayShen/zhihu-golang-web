@@ -2,15 +2,15 @@ package cache
 
 import (
 	"github.com/garyburd/redigo/redis"
-
 	"time"
 	"github.com/qq976739120/zhihu-golang-web/pkg/setting"
 	"encoding/json"
 )
 
 var (
-	RedisPool *redis.Pool
+	RedisPool redis.Pool
 )
+
 
 func InitRedis() {
 

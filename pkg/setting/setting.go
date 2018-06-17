@@ -1,7 +1,6 @@
 package setting
 
 import (
-	"log"
 	"time"
 	"github.com/go-ini/ini"
 	"fmt"
@@ -104,6 +103,7 @@ func InitSettings() {
 	//伪造的 collect 切片
 	Collect__.Collectlist = append(Collect__.Collectlist, *Collect_)
 }
+
 func LoadBase() {
 	RunMode_ = new(RunMode)
 	err := Cfg.MapTo(RunMode_)

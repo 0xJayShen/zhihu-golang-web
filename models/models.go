@@ -1,12 +1,9 @@
 package models
 
 import (
-	//"log"
-	"fmt"
 
 	"github.com/jinzhu/gorm"
 
-	"github.com/qq976739120/zhihu-golang-web/pkg/setting"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
 	"time"
